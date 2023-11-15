@@ -26,7 +26,7 @@ export default {
 
         // Запрос к API при изменении значения в поле ввода
         watch(searchTerm, () => {
-            peopleStore.fetchPeopleByName(searchTerm.value);
+            getResults(searchTerm.value);
         });
 
         // Функция для получения результатов от API
