@@ -7,24 +7,34 @@ const peopleStore = usePeopleStore()
 
 <template>
   <div class="container">
-
-
     <header class="navbar">
-
       <nav>
-        <RouterLink to="/">People List</RouterLink> -
+        <RouterLink to="/people">People List</RouterLink> -
         <RouterLink to="/favorites">Favorites - {{ peopleStore.favorites.length }}</RouterLink>
       </nav>
-
     </header>
   </div>
-  <RouterView />
+  <RouterView :key="$route.fullPath" />
 </template>
 
 <style>
+@font-face {
+  font-family: 'Sfgalaxy';
+  src: url('./assets/fonts/SfDistantGalaxyAlternate-OE4d.ttf');
+}
+
 * {
   margin: 0 auto;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Sfgalaxy';
+  letter-spacing: .1em;
+}
+
+
+
+
+button {
+  font-family: Sfgalaxy;
+  padding: 0.5rem;
 }
 
 .container {
@@ -34,7 +44,7 @@ const peopleStore = usePeopleStore()
 }
 
 tr.table-header {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Sfgalaxy';
   font-weight: 600;
 
 
@@ -50,6 +60,8 @@ tr.table-header {
   margin-bottom: 20px;
   border-radius: 10px;
 }
+
+
 
 .search-results {
   display: flex;

@@ -1,8 +1,5 @@
 # Vue 3 + TypeScript + Vite
 
-# For install dependences for this app you should run "yarn" command
-# For run development server you should run "yarn dev" command
-
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 ## Recommended IDE Setup

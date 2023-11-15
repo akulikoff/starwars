@@ -1,7 +1,6 @@
 import { defineStore } from "pinia"
 import router from "../router"
 import axios from "axios"
-
 const url = "https://swapi.dev/api/people"
 
 const loadFavoritesFromLocalStorage = () => {
@@ -28,6 +27,8 @@ export const usePeopleStore = defineStore("people", {
     list: loadListFromLocalStorage(), // PeopleList.vue
     favorites: loadFavoritesFromLocalStorage(), // FavoriteList.vue
     results: [] as PersonsInfo[],
+    hasNextPage: true,
+    loading: false,
   }),
   actions: {
     mapApiDataToPerson(apiItem: any) {
@@ -41,6 +42,7 @@ export const usePeopleStore = defineStore("people", {
         id: extractId(apiItem.url),
       } as PersonsInfo
     },
+
     isFavorite(apiItem: any) {
       return this.favorites.find(
         (item: PersonsInfo) => item.url === apiItem.url
@@ -48,13 +50,13 @@ export const usePeopleStore = defineStore("people", {
         ? true
         : false
     },
-
     async fetchPeople() {
       try {
         const res = await axios.get(`${url}`)
         const apiData = res.data.results.map((apiItem: any) =>
           this.mapApiDataToPerson(apiItem)
         )
+
         for (const item of apiData) {
           if (!this.list.some((person) => person.id === item.id)) {
             this.list.push(item)
@@ -65,11 +67,47 @@ export const usePeopleStore = defineStore("people", {
         console.log("Fetching people error", error)
       }
     },
+    async fetchPeoplePage(page: number) {
+      try {
+        this.loading = true
+        const res = await axios.get(`${url}/?page=${page}`)
+        if (!res.data.next) {
+          this.hasNextPage = false
+        }
+        if (res.data.next !== null) {
+          this.hasNextPage = true
+        }
+        const apiData = res.data.results.map((apiItem: any) =>
+          this.mapApiDataToPerson(apiItem)
+        )
+        // router.push({ params: { page: page } })
+        for (const item of apiData) {
+          if (!this.list.some((person) => person.id === item.id)) {
+            this.list.push(item)
+          }
+        }
+
+        // TODO: watch
+      } catch (error) {
+        console.log("Fetching page error", error)
+      } finally {
+        localStorage.setItem("people", JSON.stringify(this.list))
+        console.log("Fetching page finally", page)
+        this.loading = false
+      }
+    },
     async fetchPeopleByName(query: string) {
-      const res = await axios.get(`${url}/?search=${query}`)
-      this.results = res.data.results.map((apiItem: any) =>
-        this.mapApiDataToPerson(apiItem)
-      )
+      try {
+        this.loading = true
+        const res = await axios.get(`${url}/?search=${query}`)
+        this.results = res.data.results.map((apiItem: any) =>
+          this.mapApiDataToPerson(apiItem)
+        )
+      } catch (error) {
+        console.log("Searching name error", error)
+      } finally {
+        this.loading = false
+      }
     },
     async fetchPersonById(id: number) {
       const res = await axios.get(`${url}/${id}`)

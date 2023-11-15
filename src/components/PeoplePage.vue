@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { usePeopleStore } from "../store/people"
 import { useRoute } from "vue-router"
+import AppLoader from "./AppLoader.vue"
 const peopleStore = usePeopleStore()
 const route = useRoute()
-const personId = parseInt(route.params.id)
+const personId = Number(route.params.id)
 peopleStore.loadPersonById(personId)
 
 
 </script>
 <template>
+    <AppLoader v-if="peopleStore.loading" />
     <table class="mytable">
         <tbody>
             <tr class="table-header">
@@ -35,3 +37,8 @@ peopleStore.loadPersonById(personId)
         </tbody>
     </table>
 </template>
+<style scoped>
+.table-header {
+    font-size: 2.5rem;
+}
+</style>

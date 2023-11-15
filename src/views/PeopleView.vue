@@ -6,7 +6,7 @@
 import { defineComponent } from "vue";
 import PeopleList from '../components/PeopleList.vue'
 export default defineComponent({
-    name: "/",
+    name: "/people/:page",
     components: {
         PeopleList,
     },
