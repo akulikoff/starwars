@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input class="search-input" v-model.trim="searchTerm" type="text" placeholder="Type here..." />
+        <input class="search-input" v-model.trim="searchTerm" type="text" @input="getResults" placeholder="Type here..." />
 
         <p v-if="results.length > 0 && searchTerm.length > 0" class="search-results" v-for="(result, index) in results"
             :key="index">
@@ -30,20 +30,20 @@ export default {
         });
 
         // Функция для получения результатов от API
-        // const getResults = peopleStore.fetchPeopleByName()
-        // async (query: string) => {
-        //     try {
-        //         peopleStore.loading = true
-        //         const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`);
-        //         const data = response;
-        //         results.value = data.results.map((apiItem: any) => peopleStore.mapApiDataToPerson(apiItem));
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        //     finally {
-        //         peopleStore.loading = false
-        //     }
-        // };
+        const getResults = peopleStore.fetchPeopleByName()
+        async (query: string) => {
+            try {
+                peopleStore.loading = true
+                const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`);
+                const data = response;
+                results.value = data.results.map((apiItem: any) => peopleStore.mapApiDataToPerson(apiItem));
+            } catch (error) {
+                console.error(error);
+            }
+            finally {
+                peopleStore.loading = false
+            }
+        };
 
         return {
             searchTerm,
