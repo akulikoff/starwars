@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePeopleStore } from "../store/people"
-import { ref, computed, onMounted, watch } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useRoute } from 'vue-router'
 import SearchResults from "./SearchResults.vue"
 import AppLoader from "./AppLoader.vue"
@@ -25,15 +25,6 @@ function fetchPeoplePage() {
     peopleStore.fetchPeoplePage(currentPage.value);
 }
 
-watch(currentPage, async (nextPage, prevPage) => {
-    try {
-        const res = await fetch(`https://swapi.dev/api/people/?page=${nextPage}`)
-        route.params.page = nextPage.value
-    } catch (error) {
-        console.log(error)
-    }
-
-})
 </script>
 <template>
     <div>
