@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input class="search-input" v-model.trim="searchTerm" @input="getResults" placeholder="Type here..." />
+        <input class="search-input" v-model.trim="searchTerm" placeholder="Type here..." />
 
         <p v-if="results.length > 0 && searchTerm.length > 0" class="search-results" v-for="(result, index) in results"
             :key="index">
@@ -8,7 +8,7 @@
                 {{ result.name }}
             </router-link>
         </p>
-
+        <p v-else-if="searchTerm.length > 0" class="search-results">No results found</p>
     </div>
 </template>
   
@@ -25,6 +25,7 @@ export default {
         // Запрос к API при изменении значения в поле ввода
         watch(searchTerm, () => {
             getResults(searchTerm.value);
+            console.log(results);
         });
 
         // Функция для получения результатов от API
